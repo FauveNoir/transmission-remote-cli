@@ -933,10 +933,10 @@ class Interface(object):
             ord('U'):               self.torrent_upload,
             ord('D'):               self.torrent_download,
             ord('L'):               self.seed_ratio,
-            ord('t'):               self.t_key,
+            ord('.'):               self.t_key,
             ord('+'):               self.bandwidth_priority,
             ord('-'):               self.bandwidth_priority,
-            ord('J'):               self.J_key,
+            ord('T'):               self.J_key,
             ord('K'):               self.K_key,
             ord('p'):               self.pause_unpause_torrent,
             ord('P'):               self.pause_unpause_all_torrent,
@@ -951,7 +951,7 @@ class Interface(object):
             curses.KEY_UP:          self.movement_keys,
             ord('k'):               self.movement_keys,
             curses.KEY_DOWN:        self.movement_keys,
-            ord('j'):               self.movement_keys,
+            ord('t'):               self.movement_keys,
             curses.KEY_PPAGE:       self.movement_keys,
             curses.KEY_NPAGE:       self.movement_keys,
             curses.KEY_HOME:        self.movement_keys,
@@ -1523,7 +1523,7 @@ class Interface(object):
         if self.selected_torrent == -1 and len(self.torrents) > 0:
             if c == curses.KEY_UP or c == ord('k') or c == curses.ascii.ctrl(ord('p')):
                 self.focus, self.scrollpos = self.move_up(self.focus, self.scrollpos, self.tlist_item_height)
-            elif c == curses.KEY_DOWN or c == ord('j') or c == curses.ascii.ctrl(ord('n')):
+            elif c == curses.KEY_DOWN or c == ord('t') or c == curses.ascii.ctrl(ord('n')):
                 self.focus, self.scrollpos = self.move_down(self.focus, self.scrollpos, self.tlist_item_height,
                                                             self.torrents_per_page, len(self.torrents))
             elif c == curses.KEY_PPAGE or c == curses.ascii.ctrl(ord('b')):
@@ -1544,7 +1544,7 @@ class Interface(object):
                 if c == curses.KEY_UP or c == ord('k') or c == curses.ascii.ctrl(ord('p')):
                     self.focus_detaillist, self.scrollpos_detaillist = \
                         self.move_up(self.focus_detaillist, self.scrollpos_detaillist, 1)
-                elif c == curses.KEY_DOWN or c == ord('j') or c == curses.ascii.ctrl(ord('n')):
+                elif c == curses.KEY_DOWN or c == ord('t') or c == curses.ascii.ctrl(ord('n')):
                     self.focus_detaillist, self.scrollpos_detaillist = \
                         self.move_down(self.focus_detaillist, self.scrollpos_detaillist, 1,
                                        self.detaillistitems_per_page, len(self.torrent_details['files']))
@@ -1589,7 +1589,7 @@ class Interface(object):
                 if c == curses.KEY_UP or c == ord('k') or c == curses.ascii.ctrl(ord('p')):
                     if self.scrollpos_detaillist > 0:
                         self.scrollpos_detaillist -= 1
-                elif c == curses.KEY_DOWN or c == ord('j') or c == curses.ascii.ctrl(ord('n')):
+                elif c == curses.KEY_DOWN or c == ord('t') or c == curses.ascii.ctrl(ord('n')):
                     if self.scrollpos_detaillist < list_len - 1:
                         self.scrollpos_detaillist += 1
                 elif c == curses.KEY_PPAGE or c == curses.ascii.ctrl(ord('b')):
@@ -3147,7 +3147,7 @@ class Interface(object):
                     else:              number = int(input)
                     if c == curses.KEY_LEFT or c == ord('h'):    number -= smallstep
                     elif c == curses.KEY_RIGHT or c == ord('l'): number += smallstep
-                    elif c == curses.KEY_DOWN or c == ord('j'):  number -= bigstep
+                    elif c == curses.KEY_DOWN or c == ord('t'):  number -= bigstep
                     elif c == curses.KEY_UP or c == ord('k'):    number += bigstep
                     if not allow_zero and number <= 0:
                         number = 1
@@ -3178,7 +3178,7 @@ class Interface(object):
                 return -128
             elif c == ord("\n"):
                 return options[focus-1][0]
-            elif c == curses.KEY_DOWN or c == ord('j') or c == curses.ascii.ctrl(ord('n')):
+            elif c == curses.KEY_DOWN or c == ord('t') or c == curses.ascii.ctrl(ord('n')):
                 focus += 1
                 if focus > len(options): focus = 1
             elif c == curses.KEY_UP or c == ord('k') or c == curses.ascii.ctrl(ord('p')):
@@ -3276,7 +3276,7 @@ class Interface(object):
                                                  allow_negative_one=False)
                 if limit >= 0:
                     server.set_option('peer-limit-global', limit)
-            elif c == ord('t'):
+            elif c == ord('.'):
                 limit = self.dialog_input_number("Maximum number of connected peers per torrent",
                                                  self.stats['peer-limit-per-torrent'],
                                                  allow_negative_one=False)
