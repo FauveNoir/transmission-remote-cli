@@ -925,19 +925,19 @@ class Interface(object):
             curses.KEY_RIGHT:       self.right_key,
             ord('r'):               self.l_key,
             ord('h'):               self.show_sort_order_menu,
-            ord('S'):               self.show_stats,
+            ord('B'):               self.show_stats,
             ord('f'):               self.f_key,
             ord('F'):               self.rename_torrent_selected_file,
-            ord('u'):               self.global_upload,
+            ord('i'):               self.global_upload,
             ord('e'):               self.global_download,
-            ord('U'):               self.torrent_upload,
-            ord('D'):               self.torrent_download,
+            ord('I'):               self.torrent_upload,
+            ord('E'):               self.torrent_download,
             ord('L'):               self.seed_ratio,
             ord('.'):               self.t_key,
             ord('+'):               self.bandwidth_priority,
             ord('-'):               self.bandwidth_priority,
             ord('T'):               self.J_key,
-            ord('K'):               self.K_key,
+            ord('S'):               self.K_key,
             ord('p'):               self.pause_unpause_torrent,
             ord('P'):               self.pause_unpause_all_torrent,
             ord('N'):               self.start_now_torrent,
@@ -946,7 +946,7 @@ class Interface(object):
             ord('V'):               self.V_key,
             ord('d'):               self.r_key,
             curses.KEY_DC:          self.r_key,
-            ord('R'):               self.remove_torrent_local_data,
+            ord('D'):               self.remove_torrent_local_data,
             curses.KEY_SDC:         self.remove_torrent_local_data,
             curses.KEY_UP:          self.movement_keys,
             ord('s'):               self.movement_keys,
@@ -2080,7 +2080,7 @@ class Interface(object):
         self.draw_torrentlist_item(self.torrent_details, False, False, 0)
 
         # divider + menu
-        menu_items = ['_Overview', "_Files", 'P_eers', '_Trackers', 'Pie_ces' ]
+        menu_items = ['_Overview', "_Files", 'P_eers', 'Trac_kers', 'Pie_ces' ]
         xpos = int((self.width - sum(map(lambda x: len(x), menu_items))-len(menu_items)) / 2)
         for item in menu_items:
             self.pad.move(3, xpos)
@@ -2284,7 +2284,7 @@ class Interface(object):
             curses_tags = 0
             # highlight focused/selected line(s)
             while line.startswith('_'):
-                if line[1] == 'S':
+                if line[1] == 'B':
                     curses_tags  = curses.A_BOLD
                     line = line[2:]
                 if line[1] == 'F':
@@ -3021,7 +3021,7 @@ class Interface(object):
             elif index < len(input) and c == curses.ascii.ctrl(ord('s')):
                 input = input[:index]
                 if on_change: on_change(input)
-            elif c == curses.ascii.ctrl(ord('u')):
+            elif c == curses.ascii.ctrl(ord('i')):
                 # Delete from cursor until beginning of line
                 input = input[index:]
                 index = 0
@@ -3296,7 +3296,7 @@ class Interface(object):
                                           map(lambda x: x[0]==self.stats['encryption'], enc_options).index(True)+1)
                 if choice != -128:
                     server.set_option('encryption', choice)
-            elif c == ord('u'):
+            elif c == ord('i'):
                 limit = self.dialog_input_number('Upload limit for Turtle Mode in kilobytes per second',
                                                  self.stats['alt-speed-up'],
                                                  allow_negative_one=False)
@@ -3450,10 +3450,10 @@ def scale_bytes(bytes, type='short'):
         unit = 'M'
     elif bytes >= 1024:
         scaled_bytes = int(bytes / 1024)
-        unit = 'K'
+        unit = 'S'
     else:
         scaled_bytes = round((bytes / 1024.0), 1)
-        unit = 'K'
+        unit = 'S'
 
     # handle 0 bytes special
     if bytes == 0 and type == 'long':
