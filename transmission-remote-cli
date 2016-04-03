@@ -983,10 +983,10 @@ class Interface(object):
         }
 
         self.sort_options = [
-            ('name','_Name'), ('addedDate','_Age'), ('percentDone','_Progress'),
-            ('seeders','_Seeds'), ('leechers','Lee_ches'), ('sizeWhenDone', 'Si_ze'),
-            ('status','S_tatus'), ('uploadedEver','Up_loaded'),
-            ('rateUpload','_Upload Speed'), ('rateDownload','_Download Speed'),
+            ('name','_Name'), ('addedDate','A_ge'), ('percentDone','_Progress'),
+            ('seeders','See_ds'), ('leechers','Lee_ches'), ('sizeWhenDone', 'Si_ze'),
+            ('status','St_atus'), ('uploadedEver','Up_loaded'),
+            ('rateUpload','_Upload Speed'), ('rateDownload','Do_wnload Speed'),
             ('uploadRatio','_Ratio'), ('peersConnected','P_eers'),
             ('downloadDir', 'L_ocation'), ('mainTrackerDomain', 'Trac_ker') ]
 
