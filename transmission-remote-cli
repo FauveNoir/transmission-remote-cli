@@ -923,13 +923,13 @@ class Interface(object):
             ord('o'):               self.o_key,
             ord('\n'):              self.enter_key,
             curses.KEY_RIGHT:       self.right_key,
-            ord('l'):               self.l_key,
+            ord('r'):               self.l_key,
             ord('h'):               self.show_sort_order_menu,
             ord('S'):               self.show_stats,
             ord('f'):               self.f_key,
             ord('F'):               self.rename_torrent_selected_file,
             ord('u'):               self.global_upload,
-            ord('d'):               self.global_download,
+            ord('e'):               self.global_download,
             ord('U'):               self.torrent_upload,
             ord('D'):               self.torrent_download,
             ord('L'):               self.seed_ratio,
@@ -944,7 +944,7 @@ class Interface(object):
             ord('v'):               self.verify_torrent,
             ord('y'):               self.verify_torrent,
             ord('V'):               self.V_key,
-            ord('r'):               self.r_key,
+            ord('d'):               self.r_key,
             curses.KEY_DC:          self.r_key,
             ord('R'):               self.remove_torrent_local_data,
             curses.KEY_SDC:         self.remove_torrent_local_data,
@@ -964,7 +964,7 @@ class Interface(object):
             curses.ascii.ctrl(ord('p')): self.movement_keys,
             ord("\t"):              self.move_in_details,
             curses.KEY_BTAB:        self.move_in_details,
-            ord('e'):               self.move_in_details,
+            ord('j'):               self.move_in_details,
             ord('x'):               self.move_in_details,
             ord('C'):               self.toggle_compact_torrentlist,
             ord('c'):               self.file_pritority_or_switch_details,
@@ -1614,7 +1614,7 @@ class Interface(object):
     def file_pritority_or_switch_details(self, c):
         if self.selected_torrent > -1:
             # file priority OR walk through details
-            if c == curses.KEY_RIGHT or c == ord('l'):
+            if c == curses.KEY_RIGHT or c == ord('r'):
                 if self.details_category_focus == 1 and \
                         (self.selected_files or self.focus_detaillist > -1):
                     if self.selected_files:
@@ -1784,7 +1784,7 @@ class Interface(object):
                 self.next_details()
             elif c == curses.KEY_BTAB:
                 self.prev_details()
-            elif c == ord('e'):
+            elif c == ord('j'):
                 self.details_category_focus = 2
             elif c == ord('x'):
                 self.details_category_focus = 4
@@ -2775,7 +2775,7 @@ class Interface(object):
 
         if self.selected_torrent == -1:
             if self.focus >= 0:
-                help = [('enter','View'), ('p','Pause/Unpause'), ('r','Remove'), ('v','Verify')]
+                help = [('enter','View'), ('p','Pause/Unpause'), ('d','Remove'), ('v','Verify')]
             else:
                 help = [('/','Search'), ('f','Filter'), ('h','Sort')] + help + [('o','Options'), ('q','Quit')]
         else:
@@ -2789,7 +2789,7 @@ class Interface(object):
             elif self.details_category_focus == 2:
                 help = [('F1/?','Explain flags')] + help
             elif self.details_category_focus == 3:
-                help = [('a','Add Tracker'),('r','Remove Tracker')] + help
+                help = [('a','Add Tracker'),('d','Remove Tracker')] + help
 
         line = '  '.join(map(lambda x: "%s:%s" % (x[0], x[1]), help))
         line = line[0:self.width]
@@ -2968,7 +2968,7 @@ class Interface(object):
                 input = not input
             elif c == curses.KEY_LEFT or c == ord('c'):
                 input = True
-            elif c == curses.KEY_RIGHT or c == ord('l'):
+            elif c == curses.KEY_RIGHT or c == ord('r'):
                 input = False
             elif c == ord("\n") or c == ord(' '):
                 return input
@@ -3015,7 +3015,7 @@ class Interface(object):
                 input = input[:index - 1] + (index < len(input) and input[index:] or '')
                 index -= 1
                 if on_change: on_change(input)
-            elif index < len(input) and ( c == curses.KEY_DC or c == curses.ascii.ctrl(ord('d')) ):
+            elif index < len(input) and ( c == curses.KEY_DC or c == curses.ascii.ctrl(ord('e')) ):
                 input = input[:index] + input[index + 1:]
                 if on_change: on_change(input)
             elif index < len(input) and c == curses.ascii.ctrl(ord('s')):
@@ -3028,7 +3028,7 @@ class Interface(object):
                 if on_change: on_change(input)
             elif c == curses.KEY_HOME or c == curses.ascii.ctrl(ord('a')):
                 index = 0
-            elif c == curses.KEY_END or c == curses.ascii.ctrl(ord('e')):
+            elif c == curses.KEY_END or c == curses.ascii.ctrl(ord('j')):
                 index = len(input)
             elif c == ord('\n'):
                 if on_enter:
@@ -3146,7 +3146,7 @@ class Interface(object):
                     if floating_point: number = float(input)
                     else:              number = int(input)
                     if c == curses.KEY_LEFT or c == ord('c'):    number -= smallstep
-                    elif c == curses.KEY_RIGHT or c == ord('l'): number += smallstep
+                    elif c == curses.KEY_RIGHT or c == ord('r'): number += smallstep
                     elif c == curses.KEY_DOWN or c == ord('t'):  number -= bigstep
                     elif c == curses.KEY_UP or c == ord('s'):    number += bigstep
                     if not allow_zero and number <= 0:
@@ -3263,9 +3263,9 @@ class Interface(object):
                                        (1,0)[self.stats['port-forwarding-enabled']])
             elif c == ord('z'):
                 server.set_option('pex-enabled', (1,0)[self.stats['pex-enabled']])
-            elif c == ord('d'):
+            elif c == ord('e'):
                 server.set_option('dht-enabled', (1,0)[self.stats['dht-enabled']])
-            elif c == ord('l'):
+            elif c == ord('r'):
                 server.set_option('lpd-enabled', (1,0)[self.stats['lpd-enabled']])
             # uTP support was added in Transmission v2.3
             elif c == ord('m') and server.get_rpc_version() >= 13:
@@ -3302,7 +3302,7 @@ class Interface(object):
                                                  allow_negative_one=False)
                 if limit != -128:
                     server.set_option('alt-speed-up', limit)
-            elif c == ord('r'):
+            elif c == ord('d'):
                 limit = self.dialog_input_number('Download limit for Turtle Mode in kilobytes per second',
                                                  self.stats['alt-speed-down'],
                                                  allow_negative_one=False)
@@ -3323,7 +3323,7 @@ class Interface(object):
                             server.set_option('download-queue-enabled', True)
                         server.set_option('download-queue-size', queue_size)
             # Queue was implemmented in Transmission v2.4
-            elif c == ord('e') and server.get_rpc_version() >= 14:
+            elif c == ord('j') and server.get_rpc_version() >= 14:
                 queue_size = self.dialog_input_number('Seed Queue size',
                                                       (0, self.stats['seed-queue-size'])[self.stats['seed-queue-enabled']],
                                                       allow_negative_one = False)
