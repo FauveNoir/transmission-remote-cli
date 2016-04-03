@@ -2798,8 +2798,8 @@ class Interface(object):
     def list_key_bindings(self):
         title = 'Help Menu'
         message = "           F1/?  Show this help\n" + \
-                  "            u/d  Adjust maximum global up-/download rate\n" + \
-                  "            U/D  Adjust maximum up-/download rate for focused torrent\n" + \
+                  "            i/e  Adjust maximum global up-/download rate\n" + \
+                  "            I/E  Adjust maximum up-/download rate for focused torrent\n" + \
                   "              L  Set seed ratio limit for focused torrent\n" + \
                   "            +/-  Adjust bandwidth priority for focused torrent\n" + \
                   "              p  Pause/Unpause torrent\n" + \
@@ -2810,25 +2810,25 @@ class Interface(object):
                   "              F  Rename torrent/file\n" + \
                   "              n  Reannounce torrent\n" + \
                   "              a  Add torrent\n" + \
-                  "              S  Show upload/download stats\n" + \
-                  "          Del/r  Remove torrent and keep content\n" + \
-                  "    Shift+Del/R  Remove torrent and delete content\n"
+                  "              B  Show upload/download stats\n" + \
+                  "          Del/d  Remove torrent and keep content\n" + \
+                  "    Shift+Del/D  Remove torrent and delete content\n"
 
         if features['clipboard']:
             message += "              M  Copy Magnet Link to the System Clipboard\n"
 
         # Queue was implemented in Transmission v2.4
         if server.get_rpc_version() >= 14 and self.details_category_focus != 1:
-            message += "            J/K  Move focused torrent in queue up/down\n" + \
+            message += "            T/S  Move focused torrent in queue up/down\n" + \
                        " Shift+Lft/Rght  Move focused torrent in queue up/down by 10\n" + \
                        " Shift+Home/End  Move focused torrent to top/bottom of queue\n"
         else:
-            message += "            J/K  Jump to next/previous directory\n"
+            message += "            T/S  Jump to next/previous directory\n"
         # Torrent list
         if self.selected_torrent == -1:
             message += "              /  Search in torrent list\n" + \
                        "              f  Filter torrent list\n" + \
-                       "              s  Sort torrent list\n" \
+                       "              h  Sort torrent list\n" \
                        "    Enter/Right  View torrent's details\n" + \
                        "              o  Configuration options\n" + \
                        "              t  Toggle turtle mode\n" + \
@@ -2841,12 +2841,12 @@ class Interface(object):
                 title = 'Peer status flags'
                 message = " O  Optimistic unchoke\n" + \
                           " D  Downloading from this peer\n" + \
-                          " d  We would download from this peer if they'd let us\n" + \
-                          " U  Uploading to peer\n" + \
-                          " u  We would upload to this peer if they'd ask\n" + \
-                          " K  Peer has unchoked us, but we're not interested\n" + \
+                          " e  We would download from this peer if they'd let us\n" + \
+                          " I  Uploading to peer\n" + \
+                          " i  We would upload to this peer if they'd ask\n" + \
+                          " s  Peer has unchoked us, but we're not interested\n" + \
                           " ?  We unchoked this peer, but they're not interested\n" + \
-                          " E  Encrypted Connection\n" + \
+                          " j  Encrypted Connection\n" + \
                           " H  Peer was discovered through DHT\n" + \
                           " X  Peer was discovered through Peer Exchange (PEX)\n" + \
                           " I  Peer is an incoming connection\n" + \
