@@ -924,7 +924,7 @@ class Interface(object):
             ord('\n'):              self.enter_key,
             curses.KEY_RIGHT:       self.right_key,
             ord('l'):               self.l_key,
-            ord('s'):               self.show_sort_order_menu,
+            ord('h'):               self.show_sort_order_menu,
             ord('S'):               self.show_stats,
             ord('f'):               self.f_key,
             ord('F'):               self.rename_torrent_selected_file,
@@ -949,7 +949,7 @@ class Interface(object):
             ord('R'):               self.remove_torrent_local_data,
             curses.KEY_SDC:         self.remove_torrent_local_data,
             curses.KEY_UP:          self.movement_keys,
-            ord('k'):               self.movement_keys,
+            ord('s'):               self.movement_keys,
             curses.KEY_DOWN:        self.movement_keys,
             ord('t'):               self.movement_keys,
             curses.KEY_PPAGE:       self.movement_keys,
@@ -965,9 +965,9 @@ class Interface(object):
             ord("\t"):              self.move_in_details,
             curses.KEY_BTAB:        self.move_in_details,
             ord('e'):               self.move_in_details,
-            ord('c'):               self.move_in_details,
+            ord('x'):               self.move_in_details,
             ord('C'):               self.toggle_compact_torrentlist,
-            ord('h'):               self.file_pritority_or_switch_details,
+            ord('c'):               self.file_pritority_or_switch_details,
             curses.KEY_LEFT:        self.file_pritority_or_switch_details,
             ord(' '):               self.space_key,
             ord('a'):               self.a_key,
@@ -1521,7 +1521,7 @@ class Interface(object):
 
     def movement_keys(self, c):
         if self.selected_torrent == -1 and len(self.torrents) > 0:
-            if c == curses.KEY_UP or c == ord('k') or c == curses.ascii.ctrl(ord('p')):
+            if c == curses.KEY_UP or c == ord('s') or c == curses.ascii.ctrl(ord('p')):
                 self.focus, self.scrollpos = self.move_up(self.focus, self.scrollpos, self.tlist_item_height)
             elif c == curses.KEY_DOWN or c == ord('t') or c == curses.ascii.ctrl(ord('n')):
                 self.focus, self.scrollpos = self.move_down(self.focus, self.scrollpos, self.tlist_item_height,
@@ -1541,7 +1541,7 @@ class Interface(object):
             # file list
             if self.details_category_focus == 1:
                 # focus/movement
-                if c == curses.KEY_UP or c == ord('k') or c == curses.ascii.ctrl(ord('p')):
+                if c == curses.KEY_UP or c == ord('s') or c == curses.ascii.ctrl(ord('p')):
                     self.focus_detaillist, self.scrollpos_detaillist = \
                         self.move_up(self.focus_detaillist, self.scrollpos_detaillist, 1)
                 elif c == curses.KEY_DOWN or c == ord('t') or c == curses.ascii.ctrl(ord('n')):
@@ -1586,7 +1586,7 @@ class Interface(object):
                 list_len = int(piece_count / map_width) + 1
 
             if list_len:
-                if c == curses.KEY_UP or c == ord('k') or c == curses.ascii.ctrl(ord('p')):
+                if c == curses.KEY_UP or c == ord('s') or c == curses.ascii.ctrl(ord('p')):
                     if self.scrollpos_detaillist > 0:
                         self.scrollpos_detaillist -= 1
                 elif c == curses.KEY_DOWN or c == ord('t') or c == curses.ascii.ctrl(ord('n')):
@@ -1625,7 +1625,7 @@ class Interface(object):
                 else:
                     self.scrollpos_detaillist = 0
                     self.next_details()
-            elif c == curses.KEY_LEFT or c == ord('h'):
+            elif c == curses.KEY_LEFT or c == ord('c'):
                 if self.details_category_focus == 1 and \
                         (self.selected_files or self.focus_detaillist > -1):
                     if self.selected_files:
@@ -1786,7 +1786,7 @@ class Interface(object):
                 self.prev_details()
             elif c == ord('e'):
                 self.details_category_focus = 2
-            elif c == ord('c'):
+            elif c == ord('x'):
                 self.details_category_focus = 4
 
     def call_list_key_bindings(self, c):
@@ -2042,7 +2042,7 @@ class Interface(object):
             parts[0] = parts[0].ljust(20)
 
             # seeds and leeches will be appended right justified later
-            peers = "%5s seed%s " % (num2str(torrent['seeders']), ('s', ' ')[torrent['seeders']==1])
+            peers = "%5s seed%s " % (num2str(torrent['seeders']), ('h', ' ')[torrent['seeders']==1])
             peers += "%5s leech%s" % (num2str(torrent['leechers']), ('es', '  ')[torrent['leechers']==1])
 
             # show additional information if enough room
@@ -2052,7 +2052,7 @@ class Interface(object):
 
             if self.torrent_title_width - sum(map(lambda x: len(x), parts)) - len(peers) > 22:
                 parts.append("%4s peer%s connected" % (torrent['peersConnected'],
-                                                       ('s', ' ')[torrent['peersConnected'] == 1]))
+                                                       ('h', ' ')[torrent['peersConnected'] == 1]))
 
         if focused:
             tags = curses.A_REVERSE + curses.A_BOLD
@@ -2529,7 +2529,7 @@ class Interface(object):
             addstr(ypos+1, 54, "Last scrape: %s" % timestamp(t['lastScrapeTime']))
 
             if t['lastAnnounceSucceeded']:
-                peers = "%s peer%s" % (num2str(t['lastAnnouncePeerCount']), ('s', '')[t['lastAnnouncePeerCount']==1])
+                peers = "%s peer%s" % (num2str(t['lastAnnouncePeerCount']), ('h', '')[t['lastAnnouncePeerCount']==1])
                 addstr(ypos,   2, t['announce'], curses.A_BOLD + curses.A_UNDERLINE)
                 addstr(ypos+2, 11, "Result: ")
                 addstr(ypos+2, 19, "%s received" % peers, curses.A_BOLD)
@@ -2539,7 +2539,7 @@ class Interface(object):
                 announce_msg_size = self.wrap_and_draw_result(top, ypos+2, 19, self.enc(t['lastAnnounceResult']))
 
             if t['lastScrapeSucceeded']:
-                seeds   = "%s seed%s" % (num2str(t['seederCount']), ('s', '')[t['seederCount']==1])
+                seeds   = "%s seed%s" % (num2str(t['seederCount']), ('h', '')[t['seederCount']==1])
                 leeches = "%s leech%s" % (num2str(t['leecherCount']), ('es', '')[t['leecherCount']==1])
                 addstr(ypos+2, 52, "Tracker knows:")
                 addstr(ypos+2, 67, "%s and %s" % (seeds, leeches), curses.A_BOLD)
@@ -2595,7 +2595,7 @@ class Interface(object):
 
         missing_pieces = piece_count - counter - 1
         if missing_pieces:
-            line = "%d further piece%s" % (missing_pieces, ('','s')[missing_pieces>1])
+            line = "%d further piece%s" % (missing_pieces, ('','h')[missing_pieces>1])
             xpos = (self.width - len(line)) / 2
             self.pad.addstr(self.height-3, xpos, line, curses.A_REVERSE)
 
@@ -2680,7 +2680,7 @@ class Interface(object):
         if self.selected_torrent > -1 and self.details_category_focus == 2:
             self.screen.insstr((self.height-1), 0,
                                "%d peer%s connected (" % (self.torrent_details['peersConnected'],
-                                                         ('s','')[self.torrent_details['peersConnected'] == 1]) + \
+                                                         ('h','')[self.torrent_details['peersConnected'] == 1]) + \
                                    "Trackers:%d " % self.torrent_details['peersFrom']['fromTracker'] + \
                                    "DHT:%d " % self.torrent_details['peersFrom']['fromDht'] + \
                                    "LTEP:%d " % self.torrent_details['peersFrom']['fromLtep'] + \
@@ -2691,7 +2691,7 @@ class Interface(object):
         elif vmode_id > -1:
             self.screen.addstr((self.height-1), 0, "-- VISUAL --", curses.A_REVERSE)
         else:
-            self.screen.addstr((self.height-1), 0, "Torrent%s:" % ('s','')[len(self.torrents) == 1],
+            self.screen.addstr((self.height-1), 0, "Torrent%s:" % ('h','')[len(self.torrents) == 1],
                                    curses.A_REVERSE)
             self.screen.addstr("%d (" % len(self.torrents), curses.A_REVERSE)
 
@@ -2777,7 +2777,7 @@ class Interface(object):
             if self.focus >= 0:
                 help = [('enter','View'), ('p','Pause/Unpause'), ('r','Remove'), ('v','Verify')]
             else:
-                help = [('/','Search'), ('f','Filter'), ('s','Sort')] + help + [('o','Options'), ('q','Quit')]
+                help = [('/','Search'), ('f','Filter'), ('h','Sort')] + help + [('o','Options'), ('q','Quit')]
         else:
             help = [('Move with','cursor keys'), ('q','Back to List')]
             if self.details_category_focus == 1 and self.focus_detaillist > -1:
@@ -2966,7 +2966,7 @@ class Interface(object):
                 return False
             elif c == ord("\t"):
                 input = not input
-            elif c == curses.KEY_LEFT or c == ord('h'):
+            elif c == curses.KEY_LEFT or c == ord('c'):
                 input = True
             elif c == curses.KEY_RIGHT or c == ord('l'):
                 input = False
@@ -3018,7 +3018,7 @@ class Interface(object):
             elif index < len(input) and ( c == curses.KEY_DC or c == curses.ascii.ctrl(ord('d')) ):
                 input = input[:index] + input[index + 1:]
                 if on_change: on_change(input)
-            elif index < len(input) and c == curses.ascii.ctrl(ord('k')):
+            elif index < len(input) and c == curses.ascii.ctrl(ord('s')):
                 input = input[:index]
                 if on_change: on_change(input)
             elif c == curses.ascii.ctrl(ord('u')):
@@ -3145,10 +3145,10 @@ class Interface(object):
                     if input == '': input = 0
                     if floating_point: number = float(input)
                     else:              number = int(input)
-                    if c == curses.KEY_LEFT or c == ord('h'):    number -= smallstep
+                    if c == curses.KEY_LEFT or c == ord('c'):    number -= smallstep
                     elif c == curses.KEY_RIGHT or c == ord('l'): number += smallstep
                     elif c == curses.KEY_DOWN or c == ord('t'):  number -= bigstep
-                    elif c == curses.KEY_UP or c == ord('k'):    number += bigstep
+                    elif c == curses.KEY_UP or c == ord('s'):    number += bigstep
                     if not allow_zero and number <= 0:
                         number = 1
                     elif not allow_negative_one and number < 0:
@@ -3181,7 +3181,7 @@ class Interface(object):
             elif c == curses.KEY_DOWN or c == ord('t') or c == curses.ascii.ctrl(ord('n')):
                 focus += 1
                 if focus > len(options): focus = 1
-            elif c == curses.KEY_UP or c == ord('k') or c == curses.ascii.ctrl(ord('p')):
+            elif c == curses.KEY_UP or c == ord('s') or c == curses.ascii.ctrl(ord('p')):
                 focus -= 1
                 if focus < 1: focus = len(options)
             elif c == curses.KEY_HOME or c == ord('g'):
@@ -3261,7 +3261,7 @@ class Interface(object):
             elif c == ord('n'):
                 server.set_option('port-forwarding-enabled',
                                        (1,0)[self.stats['port-forwarding-enabled']])
-            elif c == ord('x'):
+            elif c == ord('z'):
                 server.set_option('pex-enabled', (1,0)[self.stats['pex-enabled']])
             elif c == ord('d'):
                 server.set_option('dht-enabled', (1,0)[self.stats['dht-enabled']])
@@ -3282,7 +3282,7 @@ class Interface(object):
                                                  allow_negative_one=False)
                 if limit >= 0:
                     server.set_option('peer-limit-per-torrent', limit)
-            elif c == ord('s'):
+            elif c == ord('h'):
                 limit = self.dialog_input_number('Stop seeding with upload/download ratio',
                                                  (-1,self.stats['seedRatioLimit'])[self.stats['seedRatioLimited']],
                                                  floating_point=True)
@@ -3291,7 +3291,7 @@ class Interface(object):
                     server.set_option('seedRatioLimited', True)
                 elif limit < 0 and limit != -128:
                     server.set_option('seedRatioLimited', False)
-            elif c == ord('c'):
+            elif c == ord('x'):
                 choice = self.dialog_menu('Encryption', enc_options,
                                           map(lambda x: x[0]==self.stats['encryption'], enc_options).index(True)+1)
                 if choice != -128:
@@ -3335,7 +3335,7 @@ class Interface(object):
                             server.set_option('seed-queue-enabled', True)
                         server.set_option('seed-queue-size', queue_size)
 
-            elif c == ord('k'):
+            elif c == ord('s'):
                 self.blank_lines = not self.blank_lines
 
             elif c == ord('v'):
@@ -3370,42 +3370,42 @@ def scale_time(seconds, type='short'):
             if seconds < 5:
                 return 'now'
             else:
-                return "%d second%s" % (seconds, ('', 's')[seconds>1])
+                return "%d second%s" % (seconds, ('', 'h')[seconds>1])
         else:
             return "%ds" % seconds
 
     elif seconds < hour_in_sec:
         minutes = round(seconds / minute_in_sec, 0)
         if type == 'long':
-            return "%d minute%s" % (minutes, ('', 's')[minutes>1])
+            return "%d minute%s" % (minutes, ('', 'h')[minutes>1])
         else:
             return "%dm" % minutes
 
     elif seconds < day_in_sec:
         hours = round(seconds / hour_in_sec, 0)
         if type == 'long':
-            return "%d hour%s" % (hours, ('', 's')[hours>1])
+            return "%d hour%s" % (hours, ('', 'h')[hours>1])
         else:
             return "%dh" % hours
 
     elif seconds < month_in_sec:
         days = round(seconds / day_in_sec, 0)
         if type == 'long':
-            return "%d day%s" % (days, ('', 's')[days>1])
+            return "%d day%s" % (days, ('', 'h')[days>1])
         else:
             return "%dd" % days
 
     elif seconds < year_in_sec:
         months = round(seconds / month_in_sec, 0)
         if type == 'long':
-            return "%d month%s" % (months, ('', 's')[months>1])
+            return "%d month%s" % (months, ('', 'h')[months>1])
         else:
             return "%dM" % months
 
     else:
         years = round(seconds / year_in_sec, 0)
         if type == 'long':
-            return "%d year%s" % (years, ('', 's')[years>1])
+            return "%d year%s" % (years, ('', 'h')[years>1])
         else:
             return "%dy" % years
 
